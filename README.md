@@ -1,4 +1,4 @@
-#GroupMe NodeJS Copypasta and Other Misc Low Effort Bot
+# GroupMe NodeJS Copypasta and Other Misc Low Effort Bot
 
 ## Introduction
 
