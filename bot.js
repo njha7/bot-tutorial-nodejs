@@ -1,15 +1,17 @@
 var HTTPS = require('https');
-var cool = require('cool-ascii-faces');
+var config = require('./config');
+var Parser = require('./commands');
+var botID = config.BOTID;
 
-var botID = process.env.BOT_ID;
 
+//TODO: add more types of spam posting
 function respond() {
-  var request = JSON.parse(this.req.chunks[0]),
-      botRegex = /^\/cool guy$/;
-
-  if(request.text && botRegex.test(request.text)) {
+  var request = JSON.parse(this.req.chunks[0]);
+  var cmd = request.text.split(' ');
+  console.log(cmd);
+  if(request.text && (cmd[0] in Parser)) {
     this.res.writeHead(200);
-    postMessage();
+    postMessage(cmd);
     this.res.end();
   } else {
     console.log("don't care");
@@ -18,10 +20,11 @@ function respond() {
   }
 }
 
-function postMessage() {
-  var botResponse, options, body, botReq;
 
-  botResponse = cool();
+function postMessage(command) {
+  var botResponse, options, body, botReq;
+  botResponse = Parser[command[0]](command);
+  console.log(botResponse);
 
   options = {
     hostname: 'api.groupme.com',
@@ -52,6 +55,5 @@ function postMessage() {
   });
   botReq.end(JSON.stringify(body));
 }
-
 
 exports.respond = respond;
